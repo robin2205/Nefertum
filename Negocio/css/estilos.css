@@ -1,0 +1,232 @@
+*{
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;}
+#background{
+  width: 100%;
+  height: auto;
+  opacity: 0.6;
+  margin-top: -100px;
+  z-index: -1;
+  position: absolute;}
+#background2{
+  width: 100%;
+  height: auto;
+  opacity: 0.6;
+  z-index: -1;
+  position: absolute;}
+.container{
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  margin-top: 100px;
+  font-family: 'Atma', cursive,Arial,Helvetica,sans-serif;}
+#lbllogin,#usuario,#contrasena,#descripcion,
+#nombrecliente,#costo,#pvp,#deuda,#pago,#fecha{
+  font-size: 20px;}
+#IdCliente,#IdArticulo,#cliente{
+  font-size: 20px;
+  padding: 0px 5px;}
+#cuerpo{
+  font-family: 'Atma', cursive,Arial,Helvetica,sans-serif;
+  font-size: 18px;}
+#titulologin{
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: -20px;}
+.container .footer{
+  position: fixed;
+  bottom: 0px;
+  right: 20px;}
+#cuerpo .footer{
+  position: absolute;
+  color: #ffffff;
+  right: 20px;
+  top: 2px;}
+#panel-body{
+  height: auto;}
+.color-azul{
+  color: #2a18fe;}
+#contexto{
+  background: #c1e7ff;
+  font-size: 20px;}
+#imamenu{
+  position: relative;
+  margin-top: -5px;}
+nav{
+  font-size: 15px;}
+nav ul{
+  list-style: none;}
+nav ul li:hover{
+  background: #3ffb90;}
+header nav ul li{
+  font-size: 15px;}
+nav ul li a span{
+  margin-right: 5px;
+  color: #d42c2c;}
+nav ul li:hover .dropdown-menu{
+  display: block;}
+nav ul li .dropdown-menu{
+  display: none;
+  width: 100%;
+  z-index: 1000;}
+nav li .dropdown-menu li a span{
+  float: right;
+  margin-right: -10px;
+  position: relative;
+  top: 3px;}
+.page-header{
+  color: #000000;}
+.sub-header{
+  color: #000000;}
+.titulos{
+  max-height: 10px;}
+#panel-body2{
+  width: 800px;
+  margin-left: -120px;
+  height: auto;}
+#btnarticulo,#btninforme,#btnclientes,#btnventa{
+  margin-top: -10px;
+  margin-bottom: 15px;}
+#IdCliente,#IdArticulo,#costo,#pvp,
+#deuda,#pago,#fecha,#btnguardarv,#btn{
+  width: 100%;}
+.modalClientes,.modalArticulos,.editarVentas,.actualizarVentas,
+.modalContacto,.modalOtros{
+  margin-top: 70px;}
+.box-body{
+  overflow-y: hidden;
+  overflow-x: hidden;}
+.control-label{
+  display: block;}
+#h1{
+  margin-top: -5px;}
+#p{
+  margin-top: -20px;}
+.banner{
+  width: 850px;
+  height: 360px;
+  border: 1px solid white;
+  margin: auto;
+  background-size: 100% 100%;
+  border-radius: 5px;
+  /*animation-name: banner;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;*/
+  /*RESUMIENDO LAS 3 LÍNEAS ANTERIORES ASÍ:*/
+  animation: banner 10s infinite;}
+#tablaclientes,#tablaarticulos,#tablaventas{
+  border-radius: 5px;}
+@keyframes banner{
+  0%,22%{
+    background-image: url(../Imagenes/logo2.png);
+    opacity: 1;}
+  23%,25%{
+    opacity: 0.1;}
+  26%,48%{
+    background-image: url(../Imagenes/banner_perfume2.png);
+    opacity: 1;}
+  49%,51%{
+    opacity: 0.1;}
+  52%,74%{
+    background-image: url(../Imagenes/banner_perfume3.png);
+    opacity: 1;}
+  75%,77%{
+    opacity: 0.1;}
+  78%,98%{
+    background-image: url(../Imagenes/banner_perfume1.png);
+    opacity: 1;}
+  99%,100%{
+    opacity: 0.1;}
+}
+
+
+@media screen and (max-width:800px){
+  #background{
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    z-index: -1;
+    position: fixed;}
+  #background2{
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+    z-index: -1;
+    position: fixed;}
+  .container{
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+    margin-top: 100px;}
+  #cuerpo{
+    height: auto;
+    font-size: 16px;}
+  #panel-body{
+    min-height: 350px;}
+  nav ul li{
+    display: block;
+    border-bottom: 1px solid rgba(255,255,255,.5);}
+  nav ul li:hover{
+    background: #3ffb90;}
+  nav ul li a{
+    display: block;}
+  nav ul li .dropdown-menu{
+    width: 100%;
+    position: relative;}
+  nav ul li .caret{
+    float: right;}
+  #contexto{
+    background: #c1e7ff;
+    font-size: 16px;}
+  .box-body{
+    overflow-y: hidden;
+    overflow-x: visible;}
+  #panel-body2{
+    margin: auto;
+    width: 100%;
+    height: auto;}
+  #p,#espacio,.footer,
+  #titulo,.sub-header{
+    display: none;}
+  #descripcion,#nombrecliente,#costo,
+  #pvp,#deuda,#pago,#fecha{
+    font-size: 16px;}
+  #IdCliente,#IdArticulo,#cliente{
+    font-size: 16px;
+    padding: 0px 5px;}
+  .table-responsive{
+    border: 0;}
+  .radio{
+    margin-bottom: -5px;}
+  .banner{
+    width: 90%;
+    max-height: 230px;
+    border: 1px solid white;
+    margin: auto;
+    background-size: 100% 100%;}
+  @keyframes banner{
+    0%,22%{
+      background-image: url(../Imagenes/logo2.png);
+      opacity: 1;}
+    23%,25%{
+      opacity: 0.1;}
+    26%,48%{
+      background-image: url(../Imagenes/banner_perfume5.png);
+      opacity: 1;}
+    49%,51%{
+      opacity: 0.1;}
+    52%,74%{
+      background-image: url(../Imagenes/banner_perfume6.png);
+      opacity: 1;}
+    75%,77%{
+      opacity: 0.1;}
+    78%,98%{
+      background-image: url(../Imagenes/banner_perfume4.png);
+      opacity: 1;}
+    99%,100%{
+      opacity: 0.1;}
+  }
+}
