@@ -1,67 +1,133 @@
 <?php
 session_start();
-include '../acciones/conexion.php';
-header("Content-type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=Ventas.xls");
-header("Pragma:no-cache");
-header("Expires:0");?>
-<!DOCTYPE html PUBLIC>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Informe Ventas</title>
-</head>
-<body>
-<table width="80%" border="1" cellspacing="0" cellpadding="0">
-  <tr>
-    <td colspan="7" bgcolor="#75d3f6"><font face="Arial" size=6><CENTER><strong>Informe Ventas</strong></CENTER></font></td>
-  </tr>
-  <tr bgcolor="white">
-    <td width="80"><font face="Arial"><CENTER><strong>Id Venta</strong></CENTER></font></td>
-    <td width="200"><font face="Arial"><CENTER><strong>Cliente</strong></CENTER></font></td>
-	<td width="250"><font face="Arial"><CENTER><strong>Artículo</strong></CENTER></font></td>
-	<td width="60"><font face="Arial"><CENTER><strong>Costo</strong></CENTER></font></td>
-    <td width="60"><font face="Arial"><CENTER><strong>PVP</strong></CENTER></font></td>
-	<td width="80"><font face="Arial"><CENTER><strong>Ganancia</strong></CENTER></font></td>
-	<td width="60"><font face="Arial"><CENTER><strong>Deuda</strong></CENTER></font></td>
-  </tr>
-<?php
-  $nombreCliente;
-  $descripcionArticulo;
-  $ganancia;
-  $sql=mysqli_query($conexion,"select IdVenta,IdCliente,IdArticulo,Costo,PVP,Deuda from ventas",0);
-  while($res=mysqli_fetch_array($sql)){
-  	$idVenta=$res['IdVenta'];
-  	//CAPTURO IdCliente
-  	$idCliente=$res['IdCliente'];
-  	//SENTENCIA PARA BUSCAR EN LA TABLA CLIENTES Y TRAER EL NOMBRE DEL CLIENTE
-  	$sql2="select *from clientes where IdCliente=".$idCliente;
-  	$resultado2=mysqli_query($conexion,$sql2);
-  	while($fila2=mysqli_fetch_assoc($resultado2)){
-  		$nombreCliente=$fila2['NombreCliente'];}
-  	//CAPTURO IdArticulo
-  	$idArticulo=$res['IdArticulo'];
-  	//SENTENCIA PARA BUSCAR EN LA TABLA ARTICULOS Y TRAER LA DESCRIPCIÓN DEL ARTICULO
-  	$sql3="select *from articulos where IdArticulo=".$idArticulo;
-  	$resultado3=mysqli_query($conexion,$sql3);
-  	while($fila3=mysqli_fetch_assoc($resultado3)){
-  		$descripcionArticulo=$fila3['DescripcionArticulo'];}
-  	$costo=$res['Costo'];
-  	$pvp=$res['PVP'];
-  	$deuda=$res['Deuda'];
-  	$ganancia=$pvp-$costo;?>
-<tr>
-	<td width="80"><font face="Arial"><?= $idVenta;?></font></td>
-	<td width="200"><font face="Arial"><?= $nombreCliente;?></font></td>
-	<td width="250"><font face="Arial"><?= $descripcionArticulo;?></font></td>
-	<td width="60"><font face="Arial"><?= $costo;?></font></td>
-	<td width="60"><font face="Arial"><?= $pvp;?></font></td>
-	<td width="80"><font face="Arial"><?= $ganancia;?></font></td>
-	<td width="60"><font face="Arial"><?= $deuda;?></font></td>
-</tr>
-<?php }
+require_once '../acciones/conexion.php';
+require_once '../Classes/PHPExcel.php';
+$objPHP=new PHPExcel();
+$objPHP->getProperties()
+->setCreator("CreativeSoft SAS")
+->setLastModifiedBy("CreativeSoft SAS")
+->setTitle("Informe Ventas")
+->setSubject("Informe")
+->setDescription("Informe")
+->setKeywords("Informe Ventas")
+->setCategory("Reporte");
+/***********************************************************************************/
+$titurepo="Informe Ventas";
+$titucabe=array('Id Venta','Cliente','Artículo','Costo','PVP','Ganancia','Deuda');
+$objPHP->setActiveSheetIndex(0)
+->mergeCells('A1:G1');
+$objPHP->setActiveSheetIndex(0)
+->setCellValue('A1',$titurepo)
+->setCellValue('A2',$titucabe[0])
+->setCellValue('B2',$titucabe[1])
+->setCellValue('C2',$titucabe[2])
+->setCellValue('D2',$titucabe[3])
+->setCellValue('E2',$titucabe[4])
+->setCellValue('F2',$titucabe[5])
+->setCellValue('G2',$titucabe[6]);
+$sql=mysqli_query($conexion,"SELECT * FROM ventas");
+$i=3;
+while($fila=mysqli_fetch_array($sql)){
+  $objPHP->setActiveSheetIndex(0)
+  ->setCellValue('A'.$i,$fila['IdVenta']);
+  $sql2=mysqli_query($conexion,"SELECT NombreCliente FROM clientes WHERE IdCliente=".$fila['IdCliente']);
+  if($fila2=mysqli_fetch_assoc($sql2)){
+    $objPHP->setActiveSheetIndex(0)
+    ->setCellValue('B'.$i,$fila2['NombreCliente']);}
+  $sql3=mysqli_query($conexion,"SELECT DescripcionArticulo FROM articulos WHERE IdArticulo=".$fila['IdArticulo']);
+  if($fila3=mysqli_fetch_assoc($sql3)){
+    $objPHP->setActiveSheetIndex(0)
+    ->setCellValue('C'.$i,$fila3['DescripcionArticulo']);}
+    $objPHP->setActiveSheetIndex(0)
+    ->setCellValue('D'.$i,$fila['Costo'])
+    ->setCellValue('E'.$i,$fila['PVP'])
+    ->setCellValue('F'.$i,$fila['PVP']-$fila['Costo'])
+    ->setCellValue('G'.$i,$fila['Deuda']);
+  $i++;}
 mysqli_free_result($sql);
-mysqli_close($conexion);?>
-</table>
-</body>
-</html>
+mysqli_free_result($sql2);
+mysqli_free_result($sql3);
+mysqli_close($conexion);
+/***********************************************************************************/
+#ESTILOS
+$estititurepo=array(
+  'font'=>array(
+    'name'=>'Arial',
+    'bold'=>true,
+    'size'=>24,
+    'color'=>array('rgb'=>'FFFFFF')),
+  'fill'=>array(
+    'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+    'color'=>array('argb'=>'145dff')),
+  'borders'=>array(
+    'allborders'=>array(
+      'style'=>PHPExcel_Style_Border::BORDER_THIN,
+      'color'=>array('rgb'=>'000000'))),
+  'alignment'=>array(
+    'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+    'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER,
+    'rotation'=>0,
+    'wrap'=>TRUE));
+$estititucabe=array(
+  'font'=>array(
+    'name'=>'Arial',
+    'bold'=>true,
+    'size'=>12,
+    'color'=>array('rgb'=>'000000')),
+  'fill'=>array(
+    'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+    'color'=>array('rgb'=>'dddddd')),
+  'borders'=>array(
+    'allborders'=>array(
+      'style'=>PHPExcel_Style_Border::BORDER_THIN,
+      'color'=>array('rgb'=>'000000'))),
+  'alignment'=>array(
+    'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+    'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER,
+    'rotation'=>0,
+    'wrap'=>TRUE));
+$estiinfo=new PHPExcel_Style();
+$estiinfo->applyFromArray(array(
+  'font'=>array(
+    'name'=>'Arial',
+    'size'=>11,
+    'color'=>array('rgb'=>'000000')),
+  'fill'=>array(
+    'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+    'color'=>array('rgb'=>'FFFFFF')),
+  'borders'=>array(
+    'allborders'=>array(
+      'style'=>PHPExcel_Style_Border::BORDER_THIN,
+      'color'=>array('rgb'=>'000000'))),
+  'alignment'=>array(
+    'rotation'=>0,
+    'wrap'=>TRUE)
+));
+$objPHP->getActiveSheet()->getStyle('A1:XFD1048576')->getFill()->setFillType(
+PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFFF');
+$objPHP->getActiveSheet()->getStyle('A1:G1')->applyFromArray($estititurepo);
+$objPHP->getActiveSheet()->getStyle('A2:G2')->applyFromArray($estititucabe);
+$objPHP->getActiveSheet()->setSharedStyle($estiinfo,'A3:G'.($i-1));
+$objPHP->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+$objPHP->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+$objPHP->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+$objPHP->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+$objPHP->getActiveSheet()->getColumnDimension('E')->setWidth(10);
+$objPHP->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+$objPHP->getActiveSheet()->getColumnDimension('G')->setWidth(11);
+$objPHP->getActiveSheet()->getRowDimension("1")->setRowHeight(35);
+$objPHP->getActiveSheet()->getRowDimension("2")->setRowHeight(22);
+for($f=3;$f<$i;$f++){
+  $objPHP->getActiveSheet()->getRowDimension($f)->setRowHeight(15);}
+#Se renombra la hoja
+$objPHP->getActiveSheet()->setTitle('Informe Ventas');
+#Se establece la hoja activa, para que cuando se abra el documento se muestre primero
+$objPHP->setActiveSheetIndex(0);
+#Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment; filename=Informe Ventas.xlsx');
+header('Cache-Control: max-age=0');
+header('Pragma: no-cache');
+$objPHP=PHPExcel_IOFactory::createWriter($objPHP,'Excel2007');
+$objPHP->save('PHP://output');
+exit;?>
